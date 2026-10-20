@@ -1,0 +1,12 @@
+{
+  "appId": "com.skylineescape.game",
+  "appName": "Skyline Escape",
+  "webDir": "www",
+  "android": {
+    "backgroundColor": "#0e1116"
+  },
+  "ios": {
+    "backgroundColor": "#0e1116",
+    "contentInset": "never"
+  }
+}

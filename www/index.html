@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#0e1116">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="description" content="Skyline Escape - a free-running parkour chase game. Everything unlocked, free forever.">
+<title>Skyline Escape</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<canvas id="game"></canvas>
+
+<!-- HUD -->
+<div id="hud" hidden>
+  <div class="hud-left">
+    <div class="hud-score" id="hudScore">0</div>
+    <div class="hud-sub"><span class="cube"></span><span id="hudCoins">0</span></div>
+  </div>
+  <div class="hud-center">
+    <div class="meter-label">HUNTER</div>
+    <div class="meter"><div class="meter-fill" id="hudMeter"></div></div>
+    <div class="progress" id="hudProgressWrap"><div class="progress-fill" id="hudProgress"></div></div>
+  </div>
+  <button class="hud-btn" id="btnPause" aria-label="Pause">II</button>
+</div>
+
+<!-- Main menu -->
+<section class="screen" id="scrMenu">
+  <div class="panel center">
+    <h1 class="logo">SKYLINE<span>ESCAPE</span></h1>
+    <p class="tag">Free-running parkour chase &middot; <b>All premium content unlocked &middot; free</b></p>
+    <div class="menu-buttons">
+      <button class="btn primary" data-go="levels">STORY</button>
+      <button class="btn" id="btnEndless">ENDLESS</button>
+      <button class="btn" data-go="gear">GEAR</button>
+      <button class="btn" data-go="help">HOW TO PLAY</button>
+    </div>
+    <div class="menu-foot">
+      <span>Data cubes: <b id="menuCoins">0</b></span>
+      <span>Endless best: <b id="menuBest">0</b></span>
+      <button class="link" id="btnMute">Sound: ON</button>
+      <button class="link" id="btnInstall" hidden>Install app</button>
+    </div>
+  </div>
+</section>
+
+<!-- Level select -->
+<section class="screen" id="scrLevels" hidden>
+  <div class="panel">
+    <div class="panel-head"><button class="back" data-go="menu">&larr;</button><h2>STORY</h2><span class="pill">ALL LEVELS UNLOCKED</span></div>
+    <div class="levels" id="levelGrid"></div>
+  </div>
+</section>
+
+<!-- Gear -->
+<section class="screen" id="scrGear" hidden>
+  <div class="panel">
+    <div class="panel-head"><button class="back" data-go="menu">&larr;</button><h2>GEAR</h2><span class="pill">PREMIUM PASS: FREE</span></div>
+    <h3>Gadgets</h3>
+    <div class="gear" id="gearGrid"></div>
+    <h3>Tricks <span class="h3note">performed in trick zones &middot; toggle which ones appear</span></h3>
+    <div class="gear" id="trickGrid"></div>
+    <h3>Vaults <span class="h3note">automatic when you jump right in front of a crate or desk</span></h3>
+    <div class="gear" id="vaultGrid"></div>
+    <h3>Outfits</h3>
+    <div class="gear" id="skinGrid"></div>
+  </div>
+</section>
+
+<!-- Help -->
+<section class="screen" id="scrHelp" hidden>
+  <div class="panel">
+    <div class="panel-head"><button class="back" data-go="menu">&larr;</button><h2>HOW TO PLAY</h2></div>
+    <div class="help">
+      <p>You're running for your life across the rooftops. Stay ahead of the hunter and reach the finish.</p>
+      <table>
+        <tr><th>Action</th><th>Touch</th><th>Keyboard</th></tr>
+        <tr><td>Jump / climb / vault</td><td>Swipe up or tap</td><td>&uarr; &nbsp;W &nbsp;Space</td></tr>
+        <tr><td>Slide / drop fast</td><td>Swipe down</td><td>&darr; &nbsp;S</td></tr>
+        <tr><td>Sprint (on yellow arrows)</td><td>Swipe right</td><td>&rarr; &nbsp;D</td></tr>
+        <tr><td>Pause</td><td>II button</td><td>Esc &nbsp;P</td></tr>
+      </table>
+      <ul>
+        <li><b>Crates &amp; desks</b>: jump just in front of them to <b>vault</b> without losing speed. Speed Vault, Dash Vault, Thief Vault and Reverse Vault over crates, Kong or Monkey Vault over desks, Double Kong over long tables. You can also slide under desks. Run into one and you stumble.</li>
+        <li><b>Hazard beams</b>: slide under them.</li>
+        <li><b>Swing bars</b> over wide gaps: jump to grab, do a giant swing, and fly across with a backflip.</li>
+        <li><b>Yellow arrows</b>: swipe right on them to sprint, which pulls you away from the hunter.</li>
+        <li><b>Big drops</b>: land from high up and you roll automatically.</li>
+        <li><b>Walls</b>: jump into a wall to climb it. Walls that are too tall stop you dead.</li>
+        <li><b>Glowing trick zones</b>: jump from inside one to do a trick. Tricks score points and push the hunter back.</li>
+        <li><b>Data cubes</b>: collect them for stars. 3 stars = finish + 70% of cubes + every trick.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- Pause -->
+<section class="screen dim" id="scrPause" hidden>
+  <div class="panel center small">
+    <h2>PAUSED</h2>
+    <div class="menu-buttons">
+      <button class="btn primary" id="btnResume">RESUME</button>
+      <button class="btn" id="btnRestart">RESTART</button>
+      <button class="btn" id="btnQuit">MAIN MENU</button>
+    </div>
+  </div>
+</section>
+
+<!-- Results -->
+<section class="screen dim" id="scrResult" hidden>
+  <div class="panel center small">
+    <h2 id="resTitle">ESCAPED</h2>
+    <div class="stars" id="resStars"></div>
+    <div class="res-stats" id="resStats"></div>
+    <div class="menu-buttons">
+      <button class="btn primary" id="btnNext">NEXT LEVEL</button>
+      <button class="btn" id="btnRetry">RETRY</button>
+      <button class="btn" id="btnResMenu">MAIN MENU</button>
+    </div>
+  </div>
+</section>
+
+<div id="rotateHint" hidden>Turn your phone sideways for the best view</div>
+
+<script src="game.js"></script>
+</body>
+</html>

@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(npm *)",
+      "PowerShell(powershell -ExecutionPolicy Bypass -File \".\\\\tools\\\\make-icons.ps1\"; Get-ChildItem .\\\\www\\\\icons)",
+      "PowerShell($c = @\\(\"$env:ProgramFiles\\\\Google\\\\Chrome\\\\Application\\\\chrome.exe\", \"${env:ProgramFiles\\(x86\\)}\\\\Microsoft\\\\Edge\\\\Application\\\\msedge.exe\", \"$env:ProgramFiles\\\\Microsoft\\\\Edge\\\\Application\\\\msedge.exe\"\\); $c | Where-Object { Test-Path $_ })",
+      "PowerShell(node tools/serve.js)",
+      "PowerShell($sp = \"C:\\\\Users\\\\SUBHAS~1\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\C--Users-Subhash-N-Desktop-VECTOR-FIRST-COPY\\\\867fa12f-4c19-47e1-9a50-b6f1fcc93eea\\\\scratchpad\"; node \"$sp\\\\cdp-test.mjs\" $sp)",
+      "PowerShell($sp = \"C:\\\\Users\\\\SUBHAS~1\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\C--Users-Subhash-N-Desktop-VECTOR-FIRST-COPY\\\\867fa12f-4c19-47e1-9a50-b6f1fcc93eea\\\\scratchpad\"; $o = node \"$sp\\\\cdp-test.mjs\" $sp | Out-String; \\($o | ConvertFrom-Json -ErrorAction SilentlyContinue\\) ; $o -split \"`n\" | Select-String '\"phase\"|\"level\"|\"t\"|ERRORS' | ForEach-Object { $_.Line.Trim\\(\\) }2)"
+    ]
+  }
+}
